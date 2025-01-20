@@ -5,14 +5,14 @@ body {
     color: white;
 }
 
-.custom-placeholder::placeholder{
+.custom_placeholder::placeholder{
     font-family: "Rubik Bubbles", system-ui;
     font-weight: 400;
     letter-spacing: 1px;
     font-size: 12px;
 }
 
-.fixed-page {
+.fixed_page {
     width: 1290px;
     display: flex;
     flex-direction: column;
@@ -30,37 +30,37 @@ header {
     position: fixed;
 }
 
-.header-list {
+.header_list {
     display: flex;
     padding: 10px 0;
     align-items: center;
 }
 
-.header-item a {
+.header_item a {
     padding-right: 100px;
 }
 
-.search-box {
+.search_box {
     background-color:rgb(16, 16, 16);
     border-radius: 15px 15px 15px 15px;
 }
 
-.search-box-view {
+.search_box_view {
     display: flex;
     align-items: center;
     padding: 0 15px 0 3px;
     height: 29px;
 }
 
-.search-box input {
+.search_box input {
     background-color: rgb(16, 16, 16);
 }
 
-.search-box input::-ms-clear {
+.search_box input::-ms-clear {
     color: rgb(30, 30, 30);
 }
 
-.page-information {
+.page_information {
     display: flex;
     padding-top: 10px;
     justify-content: space-between;
@@ -73,7 +73,7 @@ header {
     width: 478px;
 }
 
-.greeting-title {
+.greeting_title {
     font-size: 20px;
     font-weight: 400;
     font-family: "Rubik Mono One", monospace;
@@ -81,7 +81,7 @@ header {
     color: yellow;
 }
 
-.greeting-subtitle {
+.greeting_subtitle {
    color: rgb(0, 221, 255);
    -webkit-text-stroke: 1px #000000;
    font-family: "Rubik Bubbles", system-ui;
@@ -91,7 +91,7 @@ header {
    text-align: center;
 }
 
-.greeting-descr {
+.greeting_descr {
     text-align: center;
     font-size: 12px;
     font-weight: 400;
@@ -111,7 +111,7 @@ header {
     width: 225px;
 }
 
-.sign-block {
+.sign_block {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -120,11 +120,11 @@ header {
     margin: 0 auto;
 }
 
-.center-button {
+.center_button {
     display: block;
 }
 
-.sign-button {
+.sign_button {
     background-color: rgb(216, 52, 52);
     padding: 0 8px;
     margin: 5px 10px;
@@ -136,22 +136,22 @@ header {
     background-color: yellow;
 }
 
-.continue-in {
+.continue_in {
     color: rgb(0, 221, 255);
 }
 
-.create-account {
+.create_account {
     color: rgb(16, 16, 16);
 }
 
-.sign-in{
+.sign_in{
     padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.sign-in-title {
+.sign_in_title {
     text-align: center;
     font-size: 16px;
     font-weight: 400;
@@ -162,32 +162,32 @@ header {
     -webkit-text-stroke: 1px #000000;
 }
 
-.sign-in-form {
+.sign_in_form {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.sign-list {
+.sign_list {
     display: flex;
     flex-direction: column;
 }
 
 
-.sign-item {
+.sign_item {
     background-color: rgb(16, 16, 16);
     padding: 0 8px;
     margin: 5px 10px;
     border-radius: 15px 15px 15px 15px;
 }
 
-.sign-list input {
+.sign_list input {
     background-color: rgb(16, 16, 16);
     padding: 2px 0;
     color: white;
 }
 
-.sign-list span {
+.sign_list span {
     -webkit-text-stroke: 0.5px #000000;
     font-family: "Rubik Bubbles", system-ui;
     font-weight: 400;
@@ -199,7 +199,7 @@ header {
     text-align: center;
 }
 
-.sociallapp-sign {
+.sociallapp_sign {
     padding: 10px 0 10px;
     margin: 5px 0 0;
     border-top: 2px solid rgb(16, 16, 16);
@@ -213,18 +213,18 @@ header {
 
 }
 
-.sociallapp-list {
+.sociallapp_list {
     display: flex;
     justify-content: space-around;
     width: 100%;
 }
 
-.sign-up {
+.sign_up {
     width: 205px;
     padding: 10px;
 }
 
-.sign-up div{
+.sign_up div{
     text-align: center;
     font-family: "Rubik Bubbles", system-ui;
     font-weight: 400;
@@ -243,6 +243,6 @@ footer a {
     color: rgb(68, 68, 68);
 }
 
-.footer-more-info a {
+.footer_more_info a {
     padding: 0 7px;
 }

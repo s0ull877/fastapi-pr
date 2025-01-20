@@ -1,38 +1,22 @@
-import './Login.css'
 import AxeSVG from '../Axe'
-import HeaderLogo from '../../assets/Header/header_logo.svg'
-import SearchSVG from '../../assets/Header/search.svg'
+import styles from "./Login.module.css";
 import AxeHero from '../../assets/Login/axe-hero.png'
 import GoogleLogo from '../../assets/Login/google.svg'
 import SteamLogo from '../../assets/Login/steam.svg'
 import FacebookLogo from '../../assets/Login/facebook.svg'
 import { Link } from "react-router-dom";
 
+import Header from '../Header/Header';
+
 
 export default function Login () {
     return (
-        <div className="fixed-page">
-            <header className="center">
-                <ul className="header-list">
-                    <li className="header-item">
-                        <Link to="/">
-                            <img src={HeaderLogo} alt="" />
-                        </Link>
-                    </li>
-                    <li className="header-item">
-                        <div className="search-box">
-                            <label className="search-box-view">
-                                <img src={SearchSVG} alt="" />
-                                <input type="search" placeholder="Поиск" id="search-header"/>
-                            </label>
-                        </div>
-                    </li>
-                </ul>
-            </header>
-            <div className="center page-information">
-                <div className="greeting">
-                    <div className="greeting-title">Добро пожаловать на Аксевич!</div>
-                    <div className="greeting-subtitle">
+        <div className={styles.fixed_page}>
+            <Header></Header>
+            <div className={`${styles.center} ${styles.page_information}`}>
+                <div className={styles.greeting}>
+                    <div className={styles.greeting_title}>Добро пожаловать на Аксевич!</div>
+                    <div className={styles.greeting_subtitle}>
                         <span>
                             Планируйте стратегии.
                         </span>
@@ -44,32 +28,32 @@ export default function Login () {
                         </span> 
                     </div>
                     <div>
-                        <img src={AxeHero} alt="axe-hero"/>
+                        <img src={AxeHero} alt="axe_hero"/>
                     </div>
-                    <div className="greeting-descr">Присоединяйтесь к лучшему фанатскому ресурсу The world of Axe!</div>
+                    <div className={styles.greeting_descr}>Присоединяйтесь к лучшему фанатскому ресурсу The world of Axe!</div>
                 </div>
-                <div className="sign">
-                    <div className="sign-block">
-                        <div className="sign-in">
+                <div className={styles.sign}>
+                    <div className={styles.sign_block}>
+                        <div className={styles.sign_in}>
                             <AxeSVG width='70' height='70' ></AxeSVG>
-                            <div className="sign-in-title">Вход Аксевич</div>
-                            <form className="sign-in-form" action="./profile.html">
-                                <ul className="sign-list">
-                                    <li className="sign-item">
-                                        <input type="text" placeholder="Email или username" className="custom-placeholder"/>
+                            <div className={styles.sign_in_title}>Вход Аксевич</div>
+                            <form className={styles.sign_in_form} action="./profile.html">
+                                <ul className={styles.sign_list}>
+                                    <li className={styles.sign_item}>
+                                        <input type="text" placeholder="Email или username" className={styles.custom_placeholder}/>
                                     </li>
-                                    <li className="sign-item">
-                                        <input type="password" placeholder="Пароль" className="custom-placeholder"/>
+                                    <li className={styles.sign_item}>
+                                        <input type="password" placeholder="Пароль" className={styles.custom_placeholder}/>
                                     </li>
-                                    <button className="center-button">
-                                        <li className="sign-button sign-item" id="continue">
-                                            <span className="continue-in">Войти</span>
+                                    <button className={styles.center_button}>
+                                        <li className={`${styles.sign_button} ${styles.sign_item}`} id="continue">
+                                            <span className={styles.continue_in}>Войти</span>
                                         </li>
                                     </button>
                                 </ul>
                             </form>
-                            <p className="sociallapp-sign">Или войдите с помощью</p>
-                            <div className="sociallapp-list">
+                            <p className={styles.sociallapp_sign}>Или войдите с помощью</p>
+                            <div className={styles.sociallapp_list}>
                                 <a href="#">
                                     <img src={GoogleLogo} alt="" />
                                 </a>
@@ -82,12 +66,12 @@ export default function Login () {
                             </div>
                         </div>
                     </div>
-                    <div className="sign-block">
-                        <div className="sign-up">
-                            <ul className="sign-list">
-                                <li className="sign-button">
+                    <div className={styles.sign_block}>
+                        <div className={styles.sign_up}>
+                            <ul className={styles.sign_list}>
+                                <li className={styles.sign_button}>
                                     <Link to='/register'>
-                                        <span className="create-account">Создать аккаунт</span>
+                                        <span className={styles.create_account}>Создать аккаунт</span>
                                     </Link>
                                 </li>
                             </ul>
@@ -98,18 +82,18 @@ export default function Login () {
                     </div>
                 </div>
             </div>
-            <footer className="center">
+            <footer className={styles.center}>
                 <div>
                     <div>
                         <a href="#">Аксевич © 2024</a>
                     </div>
                 </div>
-                <div className="footer-more-info">
+                <div className={styles.footer_more_info}>
                     <Link to="/about">О Аксевич</Link>
                     <Link to="/rules">Правила</Link>
                     <Link to="/api">Axe API</Link>
                 </div>
-                <div className="change-language">
+                <div className={styles.change_language}>
                     <a href="./informations.html">Сменить язык | Change language</a>
                 </div>
             </footer>

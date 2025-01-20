@@ -2,19 +2,26 @@ body {
     background-color: rgb(16, 16, 16);
 }
 
-.custom-placeholder::placeholder{
+.custom_placeholder{
+    font-family: "Rubik Bubbles", system-ui;
+    font-weight: 400;
+    letter-spacing: 1px;
+    font-size: 16px;
+}
+
+.custom_placeholder::placeholder{
     font-family: "Rubik Bubbles", system-ui;
     font-weight: 400;
     letter-spacing: 1px;
     font-size: 20px;
 }
 
-.half-width {
+.half_width {
     width: 50%;
 }
 
 .errors {
-    color:  rgb(255, 255, 255);
+    color:  rgb(255, 0, 0);
     font-family: "Rubik Mono";
     font-weight: 400;
     font-style: normal;
@@ -41,13 +48,13 @@ body {
     padding: auto 0;
 }
 
-.axevich-sector {
+.axevich_sector {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.axevich-title {
+.axevich_title {
     color: yellow;
     -webkit-text-stroke: 1.2px #000000;
     font-family: "Rubik Bubbles", system-ui;
@@ -58,13 +65,13 @@ body {
 }
 
 
-.form-sector {
+.form_sector {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.form-title {
+.form_title {
     color:  rgb(209, 0, 0);
     -webkit-text-stroke: 1.2px #000000;
     font-family: "Rubik Bubbles", system-ui;
@@ -75,19 +82,19 @@ body {
     padding: 10px 0 0;
 }
 
-.form-sector ul {
+.form_sector ul {
     display: flex;
     flex-direction: column;
 }
 
-.form-item, .form-item-button {
+.form_item, .form_item_button {
     background-color: rgb(16, 16, 16);
     margin: 7px 10px;
     border-radius: 15px 15px 15px 15px;
     padding: 5px 12px;
 }
 
-.form-item input {
+.form_item input {
     background-color: rgb(16, 16, 16);
     font-size: 20px;
     color: white;
@@ -99,8 +106,7 @@ body {
     padding: 5px 12px;
 }
 
-.form-item-button li {
-    display: block;
+.form_item_button {
     margin: 0 auto;
     -webkit-text-stroke: 1px #000000;
     font-family: "Rubik Bubbles", system-ui;
@@ -111,7 +117,7 @@ body {
     color: rgb(0, 221, 255);
 }
 
-.form-descr {
+.form_descr {
     font-family: "Rubik Bubbles", system-ui;
     font-weight: 400;
     font-style: normal;

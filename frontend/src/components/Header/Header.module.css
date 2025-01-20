@@ -1,0 +1,35 @@
+
+.center {
+    padding: 0 240px;
+}
+
+.header_list {
+    display: flex;
+    padding: 10px 0;
+    align-items: center;
+}
+
+.header_item a {
+    padding-right: 100px;
+}
+
+
+.search_box {
+    background-color:rgb(16, 16, 16);
+    border-radius: 15px 15px 15px 15px;
+}
+
+.search_box_view {
+    display: flex;
+    align-items: center;
+    padding: 0 15px 0 3px;
+    height: 29px;
+}
+
+.search_box input {
+    background-color: rgb(16, 16, 16);
+}
+
+.search_box input::-ms-clear {
+    color: rgb(30, 30, 30);
+}
