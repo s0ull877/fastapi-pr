@@ -1,41 +1,14 @@
 import os
 
-from sqlalchemy import Column, String, Boolean, Text, DateTime, ForeignKey, UUID, Integer
-from sqlalchemy.orm import relationship, declarative_base, Session, declared_attr
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy import Column, String, Boolean, Text, DateTime, UUID, Integer, ForeignKey
+from sqlalchemy.orm import relationship
 
-from fastapi import HTTPException
-from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from uuid import uuid4
 
-from database import engine
+from database import engine, BaseModel
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-class Base(object):
-
-    @declared_attr
-    def __tablename__(cls):
-        return cls.__name__.lower()
-    
-    __table_args__ = {'mysql_engine': 'InnoDB'}
-
-    id = Column(Integer, primary_key=True)
-
-    def save(self, db: Session):
-        try:
-            db.add(self)
-            db.commit()
-        except IntegrityError as ex:
-            import re
-            match = re.search(r'user\.([\w]+)', ex.args[0])
-            field = match.group(1) if match else 'field'
-            raise HTTPException(status_code=400, detail=f'This {field} is already busy!')
-        else:
-            return self
-        
-BaseModel = declarative_base(cls=Base)
+from consts import PWD_CONTEXT
 
 
 class User(BaseModel):
@@ -49,14 +22,14 @@ class User(BaseModel):
     password = Column(String, nullable=False)
 
     def save(self, db):
-        self.password = pwd_context.hash(self.password)
+
+        self.password = PWD_CONTEXT.hash(self.password)
         return super().save(db=db)
 
 
 
-
-from smtplib import SMTP
-from email.mime.text import MIMEText
+from consts import MAIL_CONF
+from fastapi_mail import FastMail, MessageSchema, MessageType
 
 class EmailVerification(BaseModel):
     __tablename__ = 'email_verification'
@@ -71,20 +44,21 @@ class EmailVerification(BaseModel):
     def __str__(self):
         return f'EmailVerification for {self.user.email}'
 
-    def send_verification_email(self, email_host_user):
+    async def send_email(self):
 
         link = f'/users/verify?email={self.user.email}&code={self.code}'
         verify_link = os.getenv('HOSTNAME') + link
-        subject = f'Подтверждение учетной записи для {self.user.username}'
-        message = f'Для подтверждения учетной записи по почте {self.user.email} перейдите по ссылке: {verify_link}'
 
-        msg = MIMEText(message)
-        msg['Subject'] = subject
-        msg['From'] = email_host_user
-        msg['To'] = self.user.email
+        message = MessageSchema(
+            subject=f'Подтверждение учетной записи для {self.user.username}',
+            recipients=[self.user.email],
+            body=f'Для подтверждения учетной записи по почте {self.user.email} перейдите по ссылке: {verify_link}',
+            subtype=MessageType.plain
+        )
 
-        with SMTP('localhost') as smtp:
-            smtp.sendmail(email_host_user, [self.user.email], msg.as_string())
+        fm = FastMail(MAIL_CONF)
+        await fm.send_message(message)
+
 
     def is_expired(self):
         return datetime.now() >= self.expiration

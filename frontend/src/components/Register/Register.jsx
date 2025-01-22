@@ -20,7 +20,6 @@ const validateMessages = {
 };
 
 
-
 export default function Register () {
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
@@ -43,7 +42,7 @@ export default function Register () {
           console.log(response)
 
           if (response.status === 201) {
-            navigate('/'); // Перенаправляем пользователя
+            navigate('/verification'); // Перенаправляем пользователя
           } else {
             const errorData = await response.json();
             setError(errorData.detail || 'Что-то пошло не так. Попробуйте снова.');
@@ -95,6 +94,7 @@ export default function Register () {
                                         name="password" 
                                         rules={[
                                             { required: true }, 
+                                            { min: 8, message: 'Пароль должен быть не менее 8 символов!' },
                                             {
                                                 pattern: /^[a-zA-Z0-9а-яА-Я]+$/,
                                                 message: 'Недопустимые символы в пароле!',

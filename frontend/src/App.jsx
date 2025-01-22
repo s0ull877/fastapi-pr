@@ -13,6 +13,7 @@ export default function App() {
       <Route path="/rules" element={<Info body="rules" />} />
       <Route path="/about" element={<Info body="about" />} />
       <Route path="/api" element={<Info body="api" />} />
+      <Route path="/verification" element={<Info body="email_verification" />} />
       </Routes>
     </Router>
   );
