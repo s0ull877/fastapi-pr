@@ -4,12 +4,58 @@ import AxeHero from '../../assets/Login/axe-hero.png'
 import GoogleLogo from '../../assets/Login/google.svg'
 import SteamLogo from '../../assets/Login/steam.svg'
 import FacebookLogo from '../../assets/Login/facebook.svg'
-import { Link } from "react-router-dom";
 
 import Header from '../Header/Header';
 
+import { useState } from 'react';
+import { Link } from "react-router-dom";
+import { Button, Form, Input } from 'antd';
+
+
+const layout = {
+    wrapperCol: { span: 18,  offset: 3},
+};
+
+const validateMessages = {
+    required: '${label} обязательное поле!',
+};
+  
 
 export default function Login () {
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
+    const navigate = useNavigate();
+
+    const onFinish = async (values) => {
+        setLoading(true); 
+        setError(''); // Очищаем ошибки
+        delete values.password2
+    
+        try {
+          const response = await fetch('http://localhost:8000/token', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(values),
+          });
+          
+          console.log(response)
+          const data = await response.json();
+
+          if (response.status === 200) {
+            navigate(`/${data.username}`)
+          } else {
+            setError(data.detail || 'Что-то пошло не так. Попробуйте снова.');
+          }
+        } catch (err) {
+          setError('Ошибка подключения к серверу.');
+        } finally {
+          setLoading(false); // Отключаем индикатор загрузки
+        }
+      };
+
+
     return (
         <div className={styles.fixed_page}>
             <Header></Header>
@@ -37,21 +83,48 @@ export default function Login () {
                         <div className={styles.sign_in}>
                             <AxeSVG width='70' height='70' ></AxeSVG>
                             <div className={styles.sign_in_title}>Вход Аксевич</div>
-                            <form className={styles.sign_in_form} action="./profile.html">
-                                <ul className={styles.sign_list}>
-                                    <li className={styles.sign_item}>
-                                        <input type="text" placeholder="Email или username" className={styles.custom_placeholder}/>
-                                    </li>
-                                    <li className={styles.sign_item}>
-                                        <input type="password" placeholder="Пароль" className={styles.custom_placeholder}/>
-                                    </li>
-                                    <button className={styles.center_button}>
-                                        <li className={`${styles.sign_button} ${styles.sign_item}`} id="continue">
-                                            <span className={styles.continue_in}>Войти</span>
-                                        </li>
-                                    </button>
-                                </ul>
-                            </form>
+                            
+                            {error && <p>Проверка верификации...</p>}
+
+                            <Form
+                            {...layout}
+                            name="nest-messages"
+                            onFinish={onFinish}
+                            style={{ width: '100%' }}
+                            className={styles.sign_list}
+                            validateMessages={validateMessages}
+                            >
+                                <Form.Item 
+                                    className={styles.sign_item}
+                                    name={'usernameorpwd'} 
+                                    rules={[
+                                        { required: true }, 
+                                        {
+                                            pattern: /^[a-zA-Z0-9а-яА-Я_@.]+$/,
+                                            message: 'Недопустимые символы!',
+                                        },
+                                    ]}
+                                >
+                                <Input placeholder='username или пароль' className={`${styles.custom_placeholder}`}/>
+                                </Form.Item>
+                                <Form.Item 
+                                    className={styles.sign_item}
+                                    name="password" 
+                                    rules={[
+                                        { required: true }, 
+                                        { min: 8, message: 'Пароль должен быть не менее 8 символов!' },
+                                        {
+                                            pattern: /^[a-zA-Z0-9а-яА-Я]+$/,
+                                            message: 'Недопустимые символы в пароле!',
+                                        },
+                                    ]}
+                                >
+                                    <Input.Password placeholder='Пароль' className={styles.custom_placeholder}/> 
+                                </Form.Item>
+                                <Button className={styles.form_item_button} type="primary" htmlType="submit">
+                                    {!loading ? 'Войти' : 'Загрузка..'}
+                                </Button>
+                            </Form>
                             <p className={styles.sociallapp_sign}>Или войдите с помощью</p>
                             <div className={styles.sociallapp_list}>
                                 <a href="#">

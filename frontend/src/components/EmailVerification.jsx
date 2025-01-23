@@ -1,23 +1,22 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export default function EmailVerification() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [response, setResponse] = useState('')
+
 
   useEffect(() => {
     const email = searchParams.get("email");
     const code = searchParams.get("code");
 
-    // Проверка наличия параметров
     if (!email || !code) {
-      navigate("/"); // Перенаправление на главную страницу
+      navigate("/"); 
       return;
     }
 
-    // POST-запрос на сервер
     const verifyEmail = async () => {
       try {
         const response = await fetch("http://localhost:8000/verify-email", {
@@ -29,10 +28,12 @@ export default function EmailVerification() {
         });
 
         if (response.status === 200) {
-          navigate("/success"); // Перенаправление в случае успеха
+          // navigate("/success"); // Перенаправление в случае успеха
+          console.log('success')
+          setResponse("Вашa почта верифицирована! Теперь вы можете войти в аккаунт!");
         } else {
           const errorData = await response.json();
-          setError(errorData.detail || "Ошибка верификации.");
+          setResponse(errorData.detail || "Ошибка верификации.");
         }
       } catch (err) {
         setError("Ошибка подключения к серверу.");
@@ -47,7 +48,7 @@ export default function EmailVerification() {
   return (
     <div>
       {loading && <p>Проверка верификации...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {response && <div><p>{response}</p><div><Link to='/'>На главную</Link></div></div>}
     </div>
   );
 }

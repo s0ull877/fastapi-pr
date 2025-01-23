@@ -1,7 +1,7 @@
-from sqlalchemy import Integer, create_engine, Column
+from sqlalchemy import create_engine, Integer, Column, and_, select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, declarative_base, Session, declared_attr
+from sqlalchemy.orm import sessionmaker, declarative_base, declared_attr
 
 from fastapi import HTTPException, Depends
 
@@ -31,17 +31,49 @@ class Base(object):
 
     id = Column(Integer, primary_key=True)
 
-    def save(self, db: Session = Depends(get_db)):
+    @classmethod
+    def create(cls, **kwargs):
+        db = next(get_db())
         try:
-            db.add(self)
+            instance = cls(**kwargs)
+            db.add(instance)
             db.commit()
-            db.refresh(self)
+            db.refresh(instance)
         except IntegrityError as ex:
             import re
-            match = re.search(r'{}\.([\w]+)'.format(self.__name__.lower()), ex.args[0])
+            db.rollback()
+            match = re.search(r'{}\.([\w]+)'.format(cls.__name__.lower()), ex.args[0])
             field = match.group(1) if match else 'field'
             raise HTTPException(status_code=400, detail=f'This {field} is already busy!')
         else:
-            return self
+            return instance
+        
+    @classmethod
+    def get(cls, **kwargs):
+        db = next(get_db())
+
+        conditions = [getattr(cls, key) == value for key, value in kwargs.items()]
+        
+        stmt = select(cls).where(and_(*conditions))
+        
+        result = db.execute(stmt).scalars().first()
+        return result
+    
+
+    def update(self, **kwargs):
+        db = next(get_db())
+
+        stmt = (
+            update(type(self)).where(type(self).id == self.id).values(**kwargs)
+        )
+
+        db.execute(stmt)
+        db.commit()
+        # db.refresh(self)
+
+        return self
+
+        
+    
         
 BaseModel = declarative_base(cls=Base)

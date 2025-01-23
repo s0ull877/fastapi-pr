@@ -5,7 +5,6 @@ import styles from './Register.module.css'
 import AxeHero from '../../assets/Register/axe-logot.png'
 import AxeSVG from '../Axe'
 
-import React from 'react';
 import { Button, Form, Input } from 'antd';
 
 const layout = {
