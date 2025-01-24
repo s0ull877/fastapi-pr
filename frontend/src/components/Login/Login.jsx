@@ -96,16 +96,16 @@ export default function Login () {
                             >
                                 <Form.Item 
                                     className={styles.sign_item}
-                                    name={'usernameorpwd'} 
+                                    name={'username'} 
                                     rules={[
                                         { required: true }, 
                                         {
-                                            pattern: /^[a-zA-Z0-9а-яА-Я_@.]+$/,
+                                            pattern: /^[a-zA-Z0-9а-яА-Я_]+$/,
                                             message: 'Недопустимые символы!',
                                         },
                                     ]}
                                 >
-                                <Input placeholder='username или пароль' className={`${styles.custom_placeholder}`}/>
+                                <Input placeholder='username' className={`${styles.custom_placeholder}`}/>
                                 </Form.Item>
                                 <Form.Item 
                                     className={styles.sign_item}

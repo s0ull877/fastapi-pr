@@ -1,10 +1,13 @@
 from pydantic import BaseModel, EmailStr, UUID4
 
-class RegisterUser(BaseModel):
+class LoginUser(BaseModel):
 
     username: str
-    email: EmailStr
     password: str
+
+class RegisterUser(LoginUser):
+
+    email: EmailStr
 
 
 class EmailVerificationSchema(BaseModel):
