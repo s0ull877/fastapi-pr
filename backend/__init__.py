@@ -18,7 +18,7 @@ This REST API is able to;
 version_prefix =f"/api/{version}"
 
 app = FastAPI(
-    title="Bookly",
+    title="MMORPG",
     description=description,
     version=version,
     contact={

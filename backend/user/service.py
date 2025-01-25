@@ -1,9 +1,10 @@
+from typing import Literal
 from sqlalchemy.orm import Session
 
 from db.models import User, EmailVerification
 from db.services import BaseService
 
-from .utils import generate_passwd_hash
+from .utils import generate_passwd_hash, password_valid
 
 from config import Config
 from mail import create_message, mail
@@ -16,6 +17,18 @@ class UserService(BaseService):
 
         kwargs['password'] = generate_passwd_hash(kwargs['password'])
         return super().create(db, **kwargs)
+    
+    def authenticate(self, db: Session, username: str, plain_password: str) -> User | Literal[False]:
+
+        user: User = self.get(db=db, username=username)
+
+        if not user:
+            return False
+        
+        if not password_valid(plain_password, user.password):
+            return False
+        
+        return user
     
 
 class EmailVerificationService(BaseService):
