@@ -7,10 +7,13 @@ import FacebookLogo from '../../assets/Login/facebook.svg'
 
 import Header from '../Header/Header';
 
+import {useAuthStore} from '../../store/AuthStore'
+
 import { useState } from 'react';
 import { Link } from "react-router-dom";
 import { Button, Form, Input } from 'antd';
 
+import { useNavigate } from "react-router-dom";
 
 const layout = {
     wrapperCol: { span: 18,  offset: 3},
@@ -22,8 +25,10 @@ const validateMessages = {
   
 
 export default function Login () {
+
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
+    const authStore = useAuthStore()
     const navigate = useNavigate();
 
     const onFinish = async (values) => {
@@ -32,7 +37,7 @@ export default function Login () {
         delete values.password2
     
         try {
-          const response = await fetch('http://localhost:8000/token', {
+          const response = await fetch('http://localhost:8000/api/v1/user/login', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -40,11 +45,15 @@ export default function Login () {
             body: JSON.stringify(values),
           });
           
-          console.log(response)
           const data = await response.json();
 
           if (response.status === 200) {
-            navigate(`/${data.username}`)
+            authStore.setAuthData({
+                accessToken: data.access_token,
+                refreshToken: data.refresh_token,
+                user: data.user,
+              });
+            navigate(`/profile/${data.user.username}`)
           } else {
             setError(data.detail || 'Что-то пошло не так. Попробуйте снова.');
           }
@@ -84,7 +93,7 @@ export default function Login () {
                             <AxeSVG width='70' height='70' ></AxeSVG>
                             <div className={styles.sign_in_title}>Вход Аксевич</div>
                             
-                            {error && <p>Проверка верификации...</p>}
+                            {error && <p>{error}</p>}
 
                             <Form
                             {...layout}

@@ -19,7 +19,7 @@ export default function EmailVerification() {
 
     const verifyEmail = async () => {
       try {
-        const response = await fetch("http://localhost:8000/verify-email", {
+        const response = await fetch("http://localhost:8000/api/v1/user/verify-email", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

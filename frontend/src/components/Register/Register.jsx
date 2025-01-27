@@ -30,7 +30,7 @@ export default function Register () {
         delete values.password2
     
         try {
-          const response = await fetch('http://localhost:8000/register', {
+          const response = await fetch('http://localhost:8000/api/v1/user/register', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export default function Register () {
           console.log(response)
 
           if (response.status === 201) {
-            navigate('/verification'); // Перенаправляем пользователя
+            navigate('/email'); // Перенаправляем пользователя
           } else {
             const errorData = await response.json();
             setError(errorData.detail || 'Что-то пошло не так. Попробуйте снова.');

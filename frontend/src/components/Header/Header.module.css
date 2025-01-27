@@ -33,3 +33,31 @@
 .search_box input::-ms-clear {
     color: rgb(30, 30, 30);
 }
+
+.profile_actions {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.profile_actions a:nth-of-type(2n) {
+    padding: 0 8px;
+}
+
+.cyrcle {
+    display: inline-block;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.profile_pic {
+    border: 2px solid black;
+    width: 40px;
+    height: 40px;
+}
+
+.cyrcle_inner {
+    width:100%;
+    height:100%;
+    object-fit: cover;
+}

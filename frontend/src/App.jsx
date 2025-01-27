@@ -3,6 +3,7 @@ import Login from './components/Login/Login'
 import Info from './components/Info/Info'
 import Register from './components/Register/Register'
 import EmailVerification from './components/EmailVerification'
+import Profile from './components/Profile/Profile'
 
 export default function App() {
   
@@ -16,6 +17,7 @@ export default function App() {
       <Route path="/api" element={<Info body="api" />} />
       <Route path="/email" element={<Info body="email_verification" />} />
       <Route path="/email/verification" element={<EmailVerification />} />
+      <Route path="/profile/:username" element={<Profile />} />
       </Routes>
     </Router>
   );
