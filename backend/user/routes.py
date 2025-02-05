@@ -1,7 +1,7 @@
 from datetime import timedelta, datetime
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.responses import JSONResponse
 
 from sqlalchemy.orm import Session
 
@@ -9,8 +9,8 @@ from db.main import get_db
 
 from .utils import create_access_token
 from .service import UserService, EmailVerificationService
-from .dependencies import RefreshTokenBearer, get_current_user
-from .schemas import RegisterUser, EmailVerificationSchema, LoginUser
+from .dependencies import AccessTokenBearer, RefreshTokenBearer, get_current_user
+from .schemas import RegisterUser, EmailVerificationSchema, LoginUser, ResponseUser
 
 
 user_router = APIRouter()
@@ -92,9 +92,12 @@ async def get_new_access_token(token_details: dict = Depends(RefreshTokenBearer(
     raise HTTPException(status_code=401, detail="User has provided an invalid or expired token")
 
 
-@user_router.get("/me")
-async def get_me(user=Depends(get_current_user)):
-    return {
-        "username": user.username,
-        "email": user.email
-    }
+@user_router.get("/{username}")
+async def get_user(username: str, db: Session = Depends(get_db), token_details: dict = Depends(AccessTokenBearer())):
+
+    user = user_service.get(db=db, username=username)
+
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found!")
+    
+    return ResponseUser(**user.to_dict())

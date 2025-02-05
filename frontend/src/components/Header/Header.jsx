@@ -42,9 +42,9 @@ export default function Header () {
                             <a href="./notifications.html">
                                 <img width="30" height="30" src={BellNotf} alt="notification"/>
                             </a>
-                            <a className={`${styles.profile_pic} ${styles.cyrcle}`} href="./profile.html">
+                            <Link className={`${styles.profile_pic} ${styles.cyrcle}`} to={`profile/${authStore.username}`}>
                                 <img className={styles.cyrcle_inner} src={DefaultAvatar} alt="profile-photo-mini"/>
-                            </a>
+                            </Link>
                         </div>
                     }
 

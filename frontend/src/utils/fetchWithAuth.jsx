@@ -1,7 +1,4 @@
-import { useAuthStore } from "./stores/AuthStore";
-
-export const fetchWithAccess = async (url, options = {}) => {
-  const authStore = useAuthStore(); // Получаем доступ к AuthStore
+export const  fetchWithAccess = async (url, authStore, options = {}) => {
 
   // Добавляем заголовок Authorization, если есть accessToken
   const headers = {

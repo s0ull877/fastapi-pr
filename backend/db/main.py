@@ -1,11 +1,12 @@
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker
 
+from config import Config
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
+
 # The `connect_args` parameter is needed only for SQLite.
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+    Config.get_db_url()
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

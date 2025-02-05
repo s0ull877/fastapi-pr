@@ -1,0 +1,56 @@
+.custom-placeholder::placeholder{
+    font-family: "Rubik Bubbles", system-ui;
+    font-weight: 400;
+    letter-spacing: 1px;
+    font-size: 16px;
+}
+
+.profile-username input {
+    background-color: rgb(16, 16, 16);
+    font-size: 20px;
+    font-weight: 400;
+    font-family: "PT Sans Narrow", sans-serif;
+    color: white;
+    padding: 0 10px;
+    border-radius: 10px;
+    width: 266px;
+    -webkit-text-stroke: 0px #000000;
+}
+
+.profile-status textarea{
+    resize: none;
+    background-color: rgb(16, 16, 16);
+    font-size: 12px;
+    font-weight: 400;
+    font-family: "PT Sans Narrow", sans-serif;
+    color: white;
+    border-radius: 10px;
+    width: 276px;
+    padding: 10px 5px 20px;
+    margin: 0 0 15px
+}
+
+.wrp {
+    display: flex;
+}
+
+.logout-btn {
+    margin: 0 20px 0 auto;
+    
+    padding: 5px 10px;
+    border-radius: 14px;
+    border: 0.1px solid rgb(255, 0, 0);
+    background-color: rgb(16, 16, 16);
+
+    -webkit-text-stroke: 0.5px #000000;
+    font-family: "Rubik Bubbles", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    color: rgb(255, 0, 0);
+}
+
+.logout-btn:hover {
+    color: rgba(255, 0, 0, 0.816);
+    border: 0.1px solid rgba(255, 0, 0, 0.816);
+}

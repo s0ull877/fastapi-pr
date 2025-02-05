@@ -17,22 +17,18 @@ class BaseService:
             db.add(instance)
             db.commit()
             db.refresh(instance)
-        except IntegrityError as ex:
-            import re
+        except IntegrityError:
             db.rollback()
-            match = re.search(r'{}\.([\w]+)'.format(self.model_class.__name__.lower()), ex.args[0])
-            field = match.group(1) if match else 'field'
-            raise HTTPException(status_code=400, detail=f'This {field} is already busy!')
+            raise HTTPException(status_code=400, detail=f'Invalid input data!')
         else:
             return instance
         
-    def get(self, db: Session, **kwargs):
+    def get(self, db: Session, **filters):
 
-        conditions = [getattr(self.model_class, key) == value for key, value in kwargs.items()]
         
-        stmt = select(self.model_class).where(and_(*conditions))
+        stmt = select(self.model_class).filter_by(**filters)
         
-        result = db.execute(stmt).scalars().first()
+        result = db.execute(stmt).scalar_one_or_none()
         return result
     
 
@@ -44,6 +40,17 @@ class BaseService:
 
         db.execute(stmt)
         db.commit()
-        # db.refresh(self)
 
         return self
+    
+    def get_multi(
+            self,
+            db: Session,
+            order: str = "id",
+            limit: int = 100,
+            offset: int = 0
+        ) -> list:
+        
+        stmt = select(self.model_class).order_by(order).limit(limit).offset(offset)
+        row = db.execute(stmt)
+        return list(row.scalars().all())
