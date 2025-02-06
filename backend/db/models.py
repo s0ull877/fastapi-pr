@@ -83,6 +83,8 @@ class Post(BaseModel):
     # Связи
     owner = relationship("User", back_populates="posts")
     category = relationship("PostCategory", back_populates="posts")
+    
+    images = relationship("PostImage", back_populates="post")
 
     
     def __repr__(self):
@@ -95,7 +97,7 @@ class PostImage(BaseModel):
     post_id = Column(Integer, ForeignKey("post.id", ondelete="CASCADE"), nullable=False)
     image = Column(String, nullable=False)  # SQLAlchemy не хранит файлы, только пути
 
-    category = relationship("Post", back_populates="post_images")
+    post = relationship("Post", back_populates="images")
 
     def __repr__(self):
         return f"<PostImage(post={self.to_post_id})>"

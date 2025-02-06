@@ -17,8 +17,9 @@ class BaseService:
             db.add(instance)
             db.commit()
             db.refresh(instance)
-        except IntegrityError:
+        except IntegrityError as ex:
             db.rollback()
+            print(ex) #log
             raise HTTPException(status_code=400, detail=f'Invalid input data!')
         else:
             return instance

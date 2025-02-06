@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from slugify import slugify
 
-from db.models import PostCategory, Post
+from db.models import PostCategory, Post, PostImage
 from db.services import BaseService
 
 
@@ -19,3 +19,7 @@ class PostService(BaseService):
 
     model_class=Post
 
+
+class PostImageService(BaseService):
+
+    model_class=PostImage
