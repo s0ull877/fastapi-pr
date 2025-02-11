@@ -1,6 +1,7 @@
 import './Profile.css'
 
 import Header from '../Header/Header';
+import Post from '../Post/Post';
 import DefaultAvatar from '../../assets/Header/default-avatar.jpeg'
 
 import {Link, useNavigate, useParams} from 'react-router-dom'
@@ -16,6 +17,7 @@ import { fetchWithAccess } from '../../utils/fetchWithAuth'
 const Profile = observer(() => {
     const { username } = useParams();
     const [user, setUser] = useState(null)
+    const [posts, setPosts] = useState(null)
     const authStore = useAuthStore();
     const navigate = useNavigate()
 
@@ -23,7 +25,7 @@ const Profile = observer(() => {
         if (!authStore.isAuthenticated) {
             navigate('/');
         }
-        async function fetchData() {
+        async function fetchUserData() {
             const response = await fetchWithAccess(`http://localhost:8000/api/v1/user/${username}`, authStore)
     
             if (response.status === 404) {
@@ -31,9 +33,27 @@ const Profile = observer(() => {
             }
             const fetchedUser = await response.json();
             setUser(fetchedUser)
+            return fetchedUser
             
         }
-        fetchData()
+        async function fetchPostsData(user) {
+            const response = await fetchWithAccess(`http://localhost:8000/api/v1/post?user_id=${user.id}`, authStore)
+    
+            if (response.status === 404) {
+                navigate('/404'); 
+            }
+            const fetchedPosts = await response.json();
+            setPosts(fetchedPosts.posts)
+            
+        }
+        if (authStore.user.username == username) {
+            setUser(authStore.user)
+            fetchPostsData(authStore.user)
+        } else {
+            const fetchedUser = fetchUserData()
+            fetchPostsData(fetchedUser)
+        }
+
 
     }, [navigate, authStore.isAuthenticated]);
 
@@ -62,12 +82,16 @@ const Profile = observer(() => {
                         }
                     </div>
                 </div>
-                <div className="profile-body page-block">
-                    <h2>{username == authStore.user.username ? 'Ваши посты' : `Посты ${username}`}</h2>
-                    <ul className="post-list">
-
-                    </ul>
-                </div>
+                { posts && 
+                    <div className="profile-body page-block">
+                        <h2>{username == authStore.user.username ? 'Ваши посты' : `Посты ${username}`}</h2>
+                        {posts.map(post => (
+                            <ul key={post.id} className="post_list">
+                                <Post post={post}></Post>
+                            </ul>
+                        ))}
+                    </div>
+                }
             </div>
         </div>
     </>

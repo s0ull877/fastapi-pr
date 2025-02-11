@@ -39,7 +39,7 @@ class EmailVerificationService(BaseService):
     async def send_message(self, obj: EmailVerification):
 
         link = f'/email/verification?email={obj.email}&code={obj.code}'
-        verify_link = Config.HOSTNAME + link
+        verify_link = Config.FRONTENT_HOSTNAME + link
 
         message = create_message(
             subject=f'Подтверждение учетной записи на hostname',

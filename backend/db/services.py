@@ -1,4 +1,4 @@
-from sqlalchemy import and_, select, update
+from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError
 
 from fastapi import HTTPException
@@ -36,22 +36,24 @@ class BaseService:
     def update(self, instance, db: Session, **kwargs):
 
         stmt = (
-            update(type(instance)).where(type(instance).id == instance.id).values(**kwargs)
+            update(self.model_class).values(**kwargs).where(self.model_class.id == instance.id)
         )
 
-        db.execute(stmt)
+        result = db.execute(stmt)
         db.commit()
 
-        return self
+        return instance
     
     def get_multi(
             self,
             db: Session,
             order: str = "id",
             limit: int = 100,
-            offset: int = 0
+            offset: int = 0,
+            options: list = [],
+            filters: dict = {}
         ) -> list:
         
-        stmt = select(self.model_class).order_by(order).limit(limit).offset(offset)
+        stmt = select(self.model_class).options(*options).order_by(order).limit(limit).offset(offset).filter_by(**filters)
         row = db.execute(stmt)
         return list(row.scalars().all())

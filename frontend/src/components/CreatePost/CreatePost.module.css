@@ -1,0 +1,248 @@
+body {
+    display: flex;
+    justify-content: center;
+    background-color: rgb(16, 16, 16);
+    color: white;
+}
+
+.full_bkg {
+    background-color: rgb(16, 16, 16);
+    border-radius: 15px;
+}
+
+.post_list {
+    margin: 30px 40px;
+}
+
+.post_item {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: rgb(16, 16, 16);
+    border-radius: 15px 15px 15px 15px;
+    border: 1px solid rgb(0, 221, 255);;
+}
+
+.post_head {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.post_head_links {
+    display: flex;
+    flex-direction: column;
+}
+
+.post_time {
+    color: rgba(0, 221, 255, 0.331);
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    display: block;
+    margin: 5px 0 0 auto;
+}
+
+.post_owner_pic {
+    width: 50px;
+    height: 50px;
+    margin: 0 5px 0 0;
+}
+
+.post_owner {
+    color: white;
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+}
+
+.post_category {
+    padding: 2px 0;
+    font-size: 12px;
+    font-weight: 400;
+    font-family: "Rubik Mono One", monospace;
+    color: rgb(136, 0, 0);
+   -webkit-text-stroke: 1px #000000;
+}
+
+.media_post_data {
+    margin: 10px 0;
+    display: grid;
+    gap: 10px;
+    grid-template-rows:auto;
+    overflow: hidden;
+}
+
+.media_item img{
+    max-width:100% ;
+    height:auto;
+}
+
+.text_post_data {
+    margin: 0 0 10px;
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 1px;
+    line-height: 16px;
+    text-align: justify;
+}
+
+/* post-create */
+.fixed_page {
+    width: 1290px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+header {
+    background-color: rgb(30, 30, 30);
+}
+
+.center {
+    padding: 0 240px;
+}
+
+
+.header_list {
+    display: flex;
+    padding: 10px 0;
+    align-items: center;
+}
+
+.header_item a {
+    padding-right: 100px;
+}
+
+.search_box {
+    background-color:rgb(16, 16, 16);
+    border-radius: 15px 15px 15px 15px;
+}
+
+.search_box_view {
+    display: flex;
+    align-items: center;
+    padding: 0 15px 0 3px;
+    height: 29px;
+}
+
+.search_box input {
+    background-color: rgb(16, 16, 16);
+}
+
+.search_box input::-ms-clear {
+    color: rgb(30, 30, 30);
+}
+
+.profile_actions {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.profile_actions a:nth-of-type(2n) {
+    padding: 0 8px;
+}
+
+.cyrcle {
+    display: inline-block;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.profile_pic {
+    border: 2px solid black;
+    width: 40px;
+    height: 40px;
+}
+
+.cyrcle_inner {
+    width:100%;
+    height:100%;
+    object-fit: cover;
+}
+
+.page_block {
+    background-color: rgb(30, 30, 30);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 15px;
+    border: 1px solid rgb(0, 221, 255);
+}
+
+.no_border {
+    border: none;
+    border-radius: 0;
+}
+
+.post_category {
+    background-color: inherit;
+    border: none;
+    appearance: none;
+    outline: none
+}
+
+.post_category option {
+    background-color: inherit;
+}
+
+.text_post_data textarea {
+    resize: none;
+    width: 100%;
+    background-color: inherit;
+    border-top: 1px solid rgba(0, 221, 255, 0.834);
+    border-bottom: 1px solid rgba(0, 221, 255, 0.834);
+    padding: 10px 0;
+    height: auto;
+    color: white;
+    overflow:auto;
+    height: auto;
+}
+
+.publish_btn {
+    color:rgb(0, 255, 0);
+    padding: 7px;
+    border: 1px solid rgb(0, 255, 0);
+    background-color: rgb(9, 9, 9);
+    border-radius: 5px;
+}
+
+.publish_btn:hover {
+    opacity: 0.816;
+}
+
+input[type='file'] {
+    display: none;
+}
+
+.media_item {
+    position: absolute;
+}
+
+.display_none {
+    display: none;
+}
+
+.upload_file {
+    display: flex;
+    flex-direction: column;
+    width: 90px;
+    height: 90px;
+    text-align: center;
+    padding: 7px;
+    border: 1px solid rgb(0, 221, 255);
+    border-radius: 15px;
+    justify-content: space-around;
+    color: rgb(0, 221, 255);
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.upload_file p {
+    font-size: 30px;
+    padding: 0 0 10px;
+}

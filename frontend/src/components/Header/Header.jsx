@@ -36,14 +36,14 @@ export default function Header () {
                         authStore.isAuthenticated &&
                         
                         <div className={styles.profile_actions}>
-                            <a href="./create-post.html">
+                            <Link to='/post/create'>
                                 <img width="30" height="30" src={NewPost} alt="plus-post"/>
-                            </a>
+                            </Link>
                             <a href="./notifications.html">
                                 <img width="30" height="30" src={BellNotf} alt="notification"/>
                             </a>
-                            <Link className={`${styles.profile_pic} ${styles.cyrcle}`} to={`profile/${authStore.username}`}>
-                                <img className={styles.cyrcle_inner} src={DefaultAvatar} alt="profile-photo-mini"/>
+                            <Link className={`${styles.profile_pic} ${styles.cyrcle}`} to={`/profile/${authStore.user.username}`}>
+                                <img className={styles.cyrcle_inner} src={authStore.user.image ? authStore.user.image : DefaultAvatar} alt="profile-photo-mini"/>
                             </Link>
                         </div>
                     }

@@ -14,8 +14,8 @@ class Base(object):
     def __tablename__(cls):
         return cls.__name__.lower()
     
-    def to_dict(self) -> dict:
-        return {col.name: getattr(self, col.name) for col in self.__table__.columns}
+    def to_dict(self, exclude: list=[]) -> dict:
+        return {col.name: getattr(self, col.name) for col in self.__table__.columns if col.name not in exclude}
     
     id = Column(Integer, primary_key=True, autoincrement=True)
 
@@ -50,11 +50,10 @@ class User(BaseModel):
 
     # liked_posts = relationship("Post", secondary="post_likes", back_populates="liked_users")
 
-    def to_dict(self) -> dict:
+    def to_dict(self, exclude: list=[]) -> dict:
 
-        data: dict = super().to_dict()
-        data.pop('password')
-        return data
+        exclude.append('password')
+        return super().to_dict(exclude)
 
     def __repr__(self):
         return f"<User(username={self.username}, email={self.email})>"

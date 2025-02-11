@@ -1,0 +1,127 @@
+.full_bkg {
+    background-color: rgb(16, 16, 16);
+    border-radius: 15px;
+}
+
+.post_list {
+    margin: 30px 40px;
+}
+
+.post_item {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: rgb(16, 16, 16);
+    border-radius: 15px 15px 15px 15px;
+    border: 1px solid rgb(0, 221, 255);;
+}
+
+.post_head {
+    display: flex;
+}
+
+.post_head_links {
+    display: flex;
+    flex-direction: column;
+}
+
+.post_time {
+    color: rgba(0, 221, 255, 0.331);
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    display: block;
+    margin: 5px 0 0 auto;
+}
+
+.post_owner_pic {
+    width: 30px;
+    height: 30px;
+    margin: 0 5px 0 0;
+}
+
+.cyrcle {
+    display: inline-block;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+
+.post_owner {
+    color: white;
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+}
+
+.post_category {
+    padding: 2px 0;
+    font-size: 12px;
+    font-weight: 400;
+    font-family: "Rubik Mono One", monospace;
+    color: rgb(136, 0, 0);
+   -webkit-text-stroke: 1px #000000;
+}
+
+.media_post_data {
+    margin: 10px 0;
+    display: grid;
+    gap: 10px;
+    grid-template-rows:auto;
+    overflow: hidden;
+}
+
+.media_item img{
+    max-width:100% ;
+    height:auto;
+}
+
+
+
+.text_post_data {
+    margin: 0 0 10px;
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 1px;
+    line-height: 16px;
+    text-align: justify;
+}
+
+.other_post_data, .post_comments_button, .post_like {
+    display: flex;
+    align-items: center;
+}
+
+.post_comments_button, .post_like {
+    background-color: rgb(30, 30, 30);
+    padding: 0px 5px;
+    border-radius: 15px;
+    color:rgb(0, 221, 255);
+}
+
+.post_like:hover {
+    opacity: 0.816;
+}
+
+.liked {
+    background-color: rgba(0, 221, 255, 0.331);
+}
+
+.post_comments_button {
+    margin: 0 0 0 10px;
+}
+
+.delete_post {
+    margin-left: auto;
+    background-color: rgb(30, 30, 30);
+    padding: 0px 5px;
+    border-radius: 22px;
+}
+
+.cyrcle_inner {
+    width:100%;
+    height:100%;
+    object-fit: cover;
+}

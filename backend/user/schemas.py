@@ -9,6 +9,7 @@ class RegisterUser(LoginUser):
 
     email: EmailStr
 
+
 class ResponseUser(BaseModel):
 
     username : str

@@ -20,7 +20,7 @@ export const  fetchWithAccess = async (url, authStore, options = {}) => {
     
     await authStore.refreshTokenRequest();
 
-    response = await fetch(url, {
+    const response = await fetch(url, {
         ...options,
         headers: {
           ...headers,

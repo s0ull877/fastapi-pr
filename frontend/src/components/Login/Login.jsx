@@ -9,7 +9,7 @@ import Header from '../Header/Header';
 
 import {useAuthStore} from '../../store/AuthStore'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { Button, Form, Input } from 'antd';
 
@@ -31,6 +31,13 @@ export default function Login () {
     const authStore = useAuthStore()
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (authStore.isAuthenticated) {
+            navigate(`/profile/${authStore.user.username}`);
+        }
+    }, [navigate, authStore]);
+
+    
     const onFinish = async (values) => {
         setLoading(true); 
         setError(''); // Очищаем ошибки

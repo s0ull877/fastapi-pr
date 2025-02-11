@@ -1,10 +1,12 @@
+import os
+from shortuid import uid
 from datetime import timedelta, datetime
-
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, Form
 
 from sqlalchemy.orm import Session
 
+from config import Config
 from db.main import get_db
 
 from .utils import create_access_token
@@ -60,14 +62,14 @@ def login(data: LoginUser, db: Session = Depends(get_db)):
     access_token = create_access_token(
         user_data={
             'user_id': user.id,
-            'username': user.username
+            'email': user.email
         }
     )
 
     refresh_token = create_access_token(
         user_data={
             'user_id': user.id,
-            'username': user.username
+            'email': user.email
         },
         refresh=True,
         expiry=timedelta(days=2)
@@ -76,8 +78,14 @@ def login(data: LoginUser, db: Session = Depends(get_db)):
     return {
         "access_token": access_token,
         "refresh_token": refresh_token,
-        "user": {"username": user.username, "id": user.id},        
+        "user": {
+            "id": user.id, 
+            "username": user.username, 
+            'image': user.image,
+            'status': user.status
+        },        
     }
+
 
 
 @user_router.get("/refresh_token")
@@ -92,6 +100,7 @@ async def get_new_access_token(token_details: dict = Depends(RefreshTokenBearer(
     raise HTTPException(status_code=401, detail="User has provided an invalid or expired token")
 
 
+
 @user_router.get("/{username}")
 async def get_user(username: str, db: Session = Depends(get_db), token_details: dict = Depends(AccessTokenBearer())):
 
@@ -101,3 +110,60 @@ async def get_user(username: str, db: Session = Depends(get_db), token_details: 
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found!")
     
     return ResponseUser(**user.to_dict())
+
+
+
+@user_router.get("/media/{filename}")
+async def get_user_image(filename:str):
+
+    path = str(Config.BASE_DIR) + f'/media/users/{filename}'
+
+    if not os.path.exists(path):
+        raise HTTPException(status_code=404)
+    
+    return FileResponse(path=path)
+
+
+
+@user_router.post("/profile/edit")
+async def edit_profile(
+    username: str = Form(),
+    status: str = Form(None),
+    image: UploadFile = Form(None),
+    db: Session = Depends(get_db), 
+    user: dict = Depends(get_current_user)):
+
+    response = {
+        'update_fileds': {}
+    }
+    error = None
+
+    if status != user.status:
+
+        response['update_fileds']['status'] = status
+
+
+    if image:
+
+        filename = '{}_{}.png'.format(user.id, uid(6))
+        path= str(Config.BASE_DIR) + '/media/users/' + filename
+        
+        with open(path, 'wb') as file:
+            file.write(image.file.read())
+        
+        response['update_fileds']['image'] = Config.HOSTNAME + f'/api/v1/user/media/{filename}'
+
+    if username and username != user.username:
+
+        user_exist = user_service.get(username=username, db=db)
+        
+        if user_exist:
+            error = 'Юзернейм занят'
+        else:
+            response['update_fileds']['username'] = username
+
+    if response['update_fileds']:
+        user = user_service.update(instance=user, db=db, **response['update_fileds'])
+
+
+    return JSONResponse(content={'user': user.to_dict(exclude=['is_verified_email', 'email']), 'error': error}, status_code=200)

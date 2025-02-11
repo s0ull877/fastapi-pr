@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     SECRET_KEY: str
     ALGORITHM: str
     
+    FRONTENT_HOSTNAME: str
+
     HOSTNAME: str
    
     REDIS_URL: str = "redis://localhost:6379/0"
