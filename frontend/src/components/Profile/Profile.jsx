@@ -46,16 +46,24 @@ const Profile = observer(() => {
             setPosts(fetchedPosts.posts)
             
         }
-        if (authStore.user.username == username) {
+        if (authStore.user.username === username) {
             setUser(authStore.user)
             fetchPostsData(authStore.user)
         } else {
-            const fetchedUser = fetchUserData()
-            fetchPostsData(fetchedUser)
+            (async () => {
+                const fetchedUser = await fetchUserData();
+                console.log(fetchedUser); 
+                fetchPostsData(fetchedUser);
+            })();
         }
 
 
     }, [navigate, authStore.isAuthenticated]);
+
+
+    function handleDeletePost(postId) {
+        setPosts(prevPosts => prevPosts.filter(post => post.id !== postId));
+    }
 
     if (!user) {
         return <div>Загрузка...</div>;
@@ -87,7 +95,7 @@ const Profile = observer(() => {
                         <h2>{username == authStore.user.username ? 'Ваши посты' : `Посты ${username}`}</h2>
                         {posts.map(post => (
                             <ul key={post.id} className="post_list">
-                                <Post post={post}></Post>
+                                <Post post={post} onDelete={handleDeletePost}></Post>
                             </ul>
                         ))}
                     </div>

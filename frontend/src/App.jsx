@@ -6,6 +6,7 @@ import EmailVerification from './components/EmailVerification'
 import Profile from './components/Profile/Profile'
 import EditProfile from './components/EditProfile/EditProfile'
 import CreatePost from './components/CreatePost/CreatePost'
+import SinglePost from './components/SinglePost/SinglePost'
 
 export default function App() {
   
@@ -22,6 +23,7 @@ export default function App() {
       <Route path="/profile/:username" element={<Profile />} />
       <Route path="/profile-edit" element={<EditProfile />} />
       <Route path="/post/create" element={<CreatePost />} />
+      <Route path=":username/post/:id" element={<SinglePost />} />
       </Routes>
     </Router>
   );

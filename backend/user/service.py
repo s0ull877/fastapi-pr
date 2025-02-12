@@ -20,7 +20,7 @@ class UserService(BaseService):
     
     def authenticate(self, db: Session, username: str, plain_password: str) -> User | Literal[False]:
 
-        user: User = self.get(db=db, username=username)
+        user: User = self.get(db=db, filters={"username":username})
 
         if not user:
             return False

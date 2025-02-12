@@ -34,11 +34,11 @@ async def register_user(user: RegisterUser, db: Session = Depends(get_db)):
 @user_router.post("/verify-email")
 def verify_email(verify_data: EmailVerificationSchema, db: Session = Depends(get_db)):
 
-    verification = email_verification_service.get(db=db, **verify_data.model_dump())
+    verification = email_verification_service.get(db=db, filters=verify_data.model_dump())
 
     if verification:
         
-        user = user_service.get(db=db, email=verify_data.email)
+        user = user_service.get(db=db, filters={'email': verify_data.email})
         user_service.update(db=db, instance=user, is_verified_email=True)
         return {'success': True}
     
@@ -104,12 +104,12 @@ async def get_new_access_token(token_details: dict = Depends(RefreshTokenBearer(
 @user_router.get("/{username}")
 async def get_user(username: str, db: Session = Depends(get_db), token_details: dict = Depends(AccessTokenBearer())):
 
-    user = user_service.get(db=db, username=username)
+    user = user_service.get(db=db, filters={"username":username})
 
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found!")
     
-    return ResponseUser(**user.to_dict())
+    return user.to_dict(exclude=['is_verified_email'])
 
 
 

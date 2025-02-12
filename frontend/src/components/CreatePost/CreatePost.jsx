@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 import {useNavigate} from 'react-router-dom'
 
-import { Button, Form, Input, Upload } from 'antd';
+import { Button, Form, Upload } from 'antd';
 
 import { observer } from "mobx-react-lite";
 import { useAuthStore } from "../../store/AuthStore";

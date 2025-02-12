@@ -1,4 +1,4 @@
-from sqlalchemy import select, update
+from sqlalchemy import delete, select, update
 from sqlalchemy.exc import IntegrityError
 
 from fastapi import HTTPException
@@ -24,10 +24,10 @@ class BaseService:
         else:
             return instance
         
-    def get(self, db: Session, **filters):
+    def get(self, db: Session, options: list = [], filters: dict = {}):
 
         
-        stmt = select(self.model_class).filter_by(**filters)
+        stmt = select(self.model_class).options(*options).filter_by(**filters)
         
         result = db.execute(stmt).scalar_one_or_none()
         return result
@@ -57,3 +57,11 @@ class BaseService:
         stmt = select(self.model_class).options(*options).order_by(order).limit(limit).offset(offset).filter_by(**filters)
         row = db.execute(stmt)
         return list(row.scalars().all())
+    
+
+    def delete(self, db: Session, **filters: dict):
+
+        stmt = delete(self.model_class).filter_by(**filters)
+        result = db.execute(stmt)
+        db.commit()
+        return result.rowcount

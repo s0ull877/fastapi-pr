@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from user.routes import user_router
 from post.routes import post_router
+from comments.routes import comments_router
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import Config
@@ -44,6 +45,7 @@ app.add_middleware(
 
 app.include_router(user_router, prefix=f"{version_prefix}/user", tags=["user"])
 app.include_router(post_router, prefix=f"{version_prefix}/post", tags=["post"])
+app.include_router(comments_router, prefix=f"{version_prefix}/comment", tags=["comment"])
 
 
     

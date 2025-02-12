@@ -46,7 +46,8 @@ class User(BaseModel):
     is_verified_email = Column(Boolean, default=False)
     password = Column(String, nullable=False)
 
-    posts = relationship("Post", back_populates="owner")
+    posts = relationship("Post", back_populates="owner", cascade="all, delete-orphan")
+    comments = relationship("PostComment", back_populates="owner", cascade="all, delete-orphan")
 
     # liked_posts = relationship("Post", secondary="post_likes", back_populates="liked_users")
 
@@ -65,7 +66,7 @@ class PostCategory(BaseModel):
     name = Column(String(30), unique=True, nullable=False)
     slug = Column(String(30), unique=True, nullable=False)
 
-    posts = relationship("Post", back_populates="category")
+    posts = relationship("Post", back_populates="category", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<PostCategory(name={self.name})>"
@@ -83,11 +84,13 @@ class Post(BaseModel):
     owner = relationship("User", back_populates="posts")
     category = relationship("PostCategory", back_populates="posts")
     
-    images = relationship("PostImage", back_populates="post")
+    images = relationship("PostImage", back_populates="post", cascade="all, delete-orphan")
+    comments = relationship("PostComment", back_populates="post", cascade="all, delete-orphan")
 
     
     def __repr__(self):
         return f"<Post(owner={self.owner_id}, id={self.id})>"
+        
     
 
 class PostImage(BaseModel):
@@ -100,6 +103,20 @@ class PostImage(BaseModel):
 
     def __repr__(self):
         return f"<PostImage(post={self.to_post_id})>"
+    
+
+class PostComment(BaseModel):
+
+    owner_id = Column(Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+    post_id = Column(Integer, ForeignKey("post.id", ondelete="CASCADE"), nullable=False)
+    created_at = Column(DateTime, default=datetime.now())
+    text = Column(Text, nullable=False)
+    status = Column(Boolean, default=False)
+
+
+    owner = relationship("User", back_populates="comments")
+    post = relationship("Post", back_populates="comments")
+
     
 
 # post_likes = Table(
