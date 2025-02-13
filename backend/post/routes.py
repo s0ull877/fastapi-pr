@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, Form, status
 from fastapi.responses import FileResponse, Response
 from user.dependencies import get_current_user
 
+from .utils import post_to_json
 
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload, selectinload
@@ -48,11 +49,11 @@ async def create_category(category: PostCategorySchema, db: Session = Depends(ge
     return post_category.to_dict()
 
 
-@post_router.get("/categories", status_code=201)
+@post_router.get("/categories", status_code=200)
 async def get_categories(db: Session = Depends(get_db)):
         
     post_categories = postCategory_service.get_multi(db=db)
-    return {'categories' : [ category.to_dict() for category in post_categories]}
+    return [ category.to_dict() for category in post_categories]
 
 
 @post_router.post("/", status_code=201)
@@ -105,22 +106,16 @@ async def get_posts(
 
     for post_datas in posts:
 
-        post = post_datas['post'].to_dict(exclude=['owner_id', 'category_id'])
-        post['category'] = post_datas['post'].category.to_dict(exclude=['id'])
-        post['owner'] = post_datas['post'].owner.to_dict(exclude=['id', 'status', 'email', 'is_verified_email'])
-        post['images'] = [image.image for image in post_datas['post'].images]
-        post['comment_count'] = post_datas['comment_count']
-        post['likes_count'] = len(post_datas['post'].liked_users)
-        post['liked'] = user in post_datas['post'].liked_users
-        
-        posts_json.append(post)
+        posts_json.append(
+            post_to_json(post_data=post_datas, user=user)
+        )
 
     if order == 'pop':
         posts_json = sorted(posts_json, key=lambda post: post['likes_count'])
 
     posts_json.reverse()
 
-    return {'posts': posts_json}
+    return posts_json
 
 
 @post_router.get('/{id}')
@@ -131,15 +126,13 @@ async def get_post(id:int, db: Session = Depends(get_db), user: dict = Depends(g
     if not post:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    post_json = post.to_dict(exclude=['owner_id', 'category_id'])
-    post_json['category'] = post.category.to_dict(exclude=['id'])
-    post_json['owner'] = post.owner.to_dict(exclude=['id', 'status', 'email', 'is_verified_email'])
-    post_json['images'] = [image.image for image in post.images]
-    post_json['comment_count'] = comment_count
-    post_json['likes_count'] = len(post.liked_users)
-    post_json['liked'] = user in post.liked_users
-        
-    return post_json
+    return post_to_json(
+        post_data={
+            'post': post, 
+            'comment_count': comment_count
+        }, 
+        user=user
+    )
 
 
 @post_router.delete('/{id}', status_code=status.HTTP_204_NO_CONTENT)

@@ -70,7 +70,7 @@ export default function Post ({ post, onDelete })  {
     
     return (
         <>
-            <li className={styles.post_item}>
+            <li key={postInner.id} className={styles.post_item}>
                 <div className={styles.post}>
                     <div className={styles.post_head}>
                         <div className={`${styles.post_owner_pic} ${styles.cyrcle}`}>
@@ -85,7 +85,7 @@ export default function Post ({ post, onDelete })  {
                         </span>
                     </div>
                     <div className={styles.media_post_data}>
-                        {mediaItems}
+                        {postInner.images.lenght !== 0 && mediaItems}
                     </div>
                     <div className={styles.text_post_data}>
                         {postInner.text}

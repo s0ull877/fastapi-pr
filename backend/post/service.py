@@ -44,7 +44,7 @@ class PostService(BaseService):
     def get_multi(
             self,
             db: Session,
-            order: str = "id",
+            order: str = "created_at",
             limit: int = 100,
             offset: int = 0,
             options: list = [],
@@ -75,7 +75,7 @@ class PostService(BaseService):
         if filters:
             stmt = stmt.filter(*[getattr(self.model_class, k) == v for k,v in filters.items()])
         
-
+    
         rows = db.execute(stmt)
         return [{"post": row[0], "comment_count": row[1] or 0} for row in rows]
     

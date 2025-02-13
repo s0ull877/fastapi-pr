@@ -33,7 +33,7 @@ export default function Login () {
 
     useEffect(() => {
         if (authStore.isAuthenticated) {
-            navigate(`/profile/${authStore.user.username}`);
+            navigate(`/feed`);
         }
     }, [navigate, authStore]);
 

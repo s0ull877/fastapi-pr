@@ -43,7 +43,7 @@ const Profile = observer(() => {
                 navigate('/404'); 
             }
             const fetchedPosts = await response.json();
-            setPosts(fetchedPosts.posts)
+            setPosts(fetchedPosts)
             
         }
         if (authStore.user.username === username) {
