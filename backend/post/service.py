@@ -1,10 +1,12 @@
 import os
+from typing import Literal
 from config import Config
 
-from sqlalchemy.orm import Session, joinedload, selectinload
+from sqlalchemy import select, func, insert, delete
+from sqlalchemy.orm import Session
 from slugify import slugify
 
-from db.models import PostCategory, Post, PostImage
+from db.models import PostCategory, Post, PostImage, PostComment, post_likes
 from db.services import BaseService
 
 
@@ -24,8 +26,20 @@ class PostService(BaseService):
 
     def get(self, db: Session, options: list =[], filters: dict = []):
         
-        return super().get(db, options, filters)
-
+        comment_count_subquery = (
+            select(func.count(PostComment.id))
+            .where(PostComment.post_id == Post.id, PostComment.status == True)
+            .correlate(Post)
+            .as_scalar()
+        )
+        stmt = select(self.model_class, comment_count_subquery.label("comment_count")).options(*options).filter_by(**filters)
+        result = db.execute(stmt).first()
+        
+        if result:
+            return result
+        
+        return (None, None)
+        
 
     def get_multi(
             self,
@@ -35,9 +49,43 @@ class PostService(BaseService):
             offset: int = 0,
             options: list = [],
             filters: dict = {}
-        ) -> list:
+        ) -> list[dict[Literal['post'], Post, Literal['comment_count'], int]]:
         
-        return super().get_multi(db, order, limit, offset, options, filters)
+        comment_count_subquery = (
+            select(Post.id, func.count(PostComment.id).label("comment_count"))
+            .outerjoin(PostComment, (Post.id == PostComment.post_id) & (PostComment.status == True))
+            .group_by(Post.id)
+            .subquery()
+        )
+
+        stmt = select(self.model_class, comment_count_subquery.c.comment_count) \
+            .join(comment_count_subquery, self.model_class.id == comment_count_subquery.c.id, isouter=True) \
+            .options(*options) \
+            .order_by(order) \
+            .limit(limit) \
+            .offset(offset).filter(*[getattr(self.model_class, k) == v for k,v in filters.items()])
+        
+
+        rows = db.execute(stmt)
+        return [{"post": row[0], "comment_count": row[1] or 0} for row in rows]
+    
+
+    def like(self, db: Session, id: int, user_id: int):
+
+        db.execute(
+            insert(post_likes).values(post_id=id, user_id=user_id)
+        )
+        db.commit()
+
+    def delete_like(self, db: Session, id: int, user_id: int):
+
+        db.execute(
+            delete(post_likes).where(
+                post_likes.c.post_id == id,
+                post_likes.c.user_id == user_id
+            )
+        )
+        db.commit()
 
 
 
@@ -61,3 +109,8 @@ class PostImageService(BaseService):
             except Exception as ex:
             
                 print(f"Error deleting {file_path}:", ex)
+
+
+class PostLikeService(BaseService):
+
+    model_class=post_likes

@@ -18,7 +18,7 @@ import moment from 'moment';
 
 const CommentItem = (comment) => {
     return (
-        <li className={styles.comment_item}>
+        <li key={comment.id} className={styles.comment_item}>
             <Link to={`/profile/${comment.owner.username}`}>
                 <div className={`${styles.cyrcle} ${styles.comment_owner_pic}`}>
                     <img className={styles.cyrcle_inner} src={comment.owner.image ? comment.owner.image : DefaultAvatar} alt="comments_owner_2"/>
@@ -104,6 +104,8 @@ export default function SinglePost() {
                 const data = await response.json()
                 if (authStore.user.username !== post.owner.username) {
                     setMessage('Ваши комментарии будут видны всем, после одобрения автора')
+                } else {
+                    setPost({...post, comment_count: post.comment_count + 1})
                 }
                 setComments(prevComments => [{owner: authStore.user, ...data}].concat(prevComments));
             } 

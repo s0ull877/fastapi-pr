@@ -1,0 +1,171 @@
+.fixed_page {
+    width: 1290px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+.center {
+    padding: 0 240px;
+}
+
+.cyrcle {
+    display: inline-block;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.cyrcle_inner {
+    width:100%;
+    height:100%;
+    object-fit: cover;
+}
+
+.page_block {
+    background-color: rgb(30, 30, 30);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 15px;
+    border: 1px solid rgb(0, 221, 255);
+}
+
+.notification_item {
+    margin: 10px 20px;
+    border-top: 1px solid  rgba(0, 221, 255, 0.683);
+    padding: 10px 0 0;
+}
+
+.notification_item:nth-of-type(1) {
+    margin: 0 20px 10px;
+    border: none;
+    padding: 0;
+}
+
+.notification_head {
+    display: flex;
+    justify-content: space-between;
+}
+
+.notification_owner{
+    display: flex;
+}
+
+.notification_owner_name {
+    color: white;
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+}
+
+.notification_time {
+    color: rgb(128, 128, 128);
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+}   
+
+.notification_head .cyrcle {
+    width: 30px;
+    height: 30px;
+    margin: 0 5px 0 0;
+}
+
+.notification_to_post {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color:white;
+    margin: 10px 0;
+}
+
+.notification_to_post a {
+    display: flex;
+}
+
+.notification_to_post a:hover {
+    opacity: 0.816;
+}
+
+.post_time {
+    color: rgb(0, 221, 255);
+    margin: 0 5px 0 0;
+}
+
+.post_text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: rgb(200, 199, 199);
+}
+
+.notification_content {
+    background-color: rgb(16, 16, 16);
+    margin: 0 0 10px 0;
+    padding: 5px;
+    text-align:justify;
+}
+
+.notification_buttons {
+    padding: 5px;
+}
+
+.approve_notification {
+    color: yellow;
+    border-radius: 5px;
+    padding: 6px;
+    margin-right: 10px;
+    background-color: rgb(16, 16, 16);
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    border: 1px yellow solid;
+}
+
+.approve_notification {
+    color: yellow;
+    border-radius: 5px;
+    padding: 6px;
+    margin-right: 10px;
+    background-color: rgb(16, 16, 16);
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    border: 1px yellow solid;
+}
+
+.approve_notification:hover {
+    border: 1px rgba(255, 255, 0, 0.815) solid;
+    color: rgba(255, 255, 0, 0.815);
+}
+
+.eject_notificaton {
+    color: red;
+    border-radius: 5px;
+    padding: 6px;
+    margin-right: 10px;
+    background-color: rgb(16, 16, 16);
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    border: 1px red solid;   
+}
+
+.eject_notificaton:hover {
+    border: 1px rgba(255, 0, 0, 0.815) solid;
+    color: rgba(255, 0, 0, 0.815);
+}
+
+.empty_notifications {
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 40px;
+    width: 768px;
+    text-align: center;
+}

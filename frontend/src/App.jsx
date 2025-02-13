@@ -7,6 +7,7 @@ import Profile from './components/Profile/Profile'
 import EditProfile from './components/EditProfile/EditProfile'
 import CreatePost from './components/CreatePost/CreatePost'
 import SinglePost from './components/SinglePost/SinglePost'
+import Notifications from './components/Notifications/Notifications'
 
 export default function App() {
   
@@ -24,6 +25,7 @@ export default function App() {
       <Route path="/profile-edit" element={<EditProfile />} />
       <Route path="/post/create" element={<CreatePost />} />
       <Route path=":username/post/:id" element={<SinglePost />} />
+      <Route path="/notifications" element={<Notifications />} />
       </Routes>
     </Router>
   );

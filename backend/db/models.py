@@ -35,6 +35,13 @@ class EmailVerification(BaseModel):
         return f"<EmailVerification(email={self.email}, expiration={self.expiration})>"
     
 
+post_likes = Table(
+    "post_likes",
+    BaseModel.metadata,
+    Column("post_id", Integer, ForeignKey("post.id", ondelete="CASCADE"), primary_key=True),
+    Column("user_id", Integer, ForeignKey("user.id", ondelete="CASCADE"), primary_key=True),
+)
+
 
 class User(BaseModel):
     __tablename__ = 'user'
@@ -49,7 +56,7 @@ class User(BaseModel):
     posts = relationship("Post", back_populates="owner", cascade="all, delete-orphan")
     comments = relationship("PostComment", back_populates="owner", cascade="all, delete-orphan")
 
-    # liked_posts = relationship("Post", secondary="post_likes", back_populates="liked_users")
+    liked_posts = relationship("Post", secondary=post_likes, back_populates="liked_users")
 
     def to_dict(self, exclude: list=[]) -> dict:
 
@@ -87,6 +94,7 @@ class Post(BaseModel):
     images = relationship("PostImage", back_populates="post", cascade="all, delete-orphan")
     comments = relationship("PostComment", back_populates="post", cascade="all, delete-orphan")
 
+    liked_users = relationship("User", secondary=post_likes, back_populates="liked_posts") 
     
     def __repr__(self):
         return f"<Post(owner={self.owner_id}, id={self.id})>"
@@ -118,20 +126,6 @@ class PostComment(BaseModel):
     post = relationship("Post", back_populates="comments")
 
     
-
-# post_likes = Table(
-#     'post_likes',
-#     BaseModel.metadata,
-#     Column('post_id', Integer, ForeignKey('post.id', ondelete="CASCADE"), primary_key=True),
-#     Column('user_id', Integer, ForeignKey('user.id', ondelete="CASCADE"), primary_key=True)
-# )
-
-# # Добавление связи "многие ко многим"
-# User.liked_posts = relationship("Post", secondary=post_likes, back_populates="liked_users")
-# Post.liked_users = relationship("User", secondary=post_likes, back_populates="liked_posts")
-    
-
-
 
     
 BaseModel.metadata.create_all(bind=engine)

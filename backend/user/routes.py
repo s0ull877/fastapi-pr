@@ -109,7 +109,7 @@ async def get_user(username: str, db: Session = Depends(get_db), token_details: 
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found!")
     
-    return user.to_dict(exclude=['is_verified_email'])
+    return user.to_dict(exclude=['is_verified_email', 'email'])
 
 
 

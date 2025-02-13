@@ -39,9 +39,9 @@ export default function Header () {
                             <Link to='/post/create'>
                                 <img width="30" height="30" src={NewPost} alt="plus-post"/>
                             </Link>
-                            <a href="./notifications.html">
+                            <Link to='/notifications'>
                                 <img width="30" height="30" src={BellNotf} alt="notification"/>
-                            </a>
+                            </Link>
                             <Link className={`${styles.profile_pic} ${styles.cyrcle}`} to={`/profile/${authStore.user.username}`}>
                                 <img className={styles.cyrcle_inner} src={authStore.user.image ? authStore.user.image : DefaultAvatar} alt="profile-photo-mini"/>
                             </Link>

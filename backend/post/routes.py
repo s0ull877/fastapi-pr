@@ -2,15 +2,15 @@ import os
 from shortuid import uid
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, Form, status
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import FileResponse, Response
 from user.dependencies import get_current_user
 
 
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload, selectinload
 
-from .schemas import PostCategorySchema, PostSchema
-from .service import PostCategoryService, PostService, PostImageService
+from .schemas import PostCategorySchema
+from .service import PostCategoryService, PostService, PostImageService, PostLikeService
 
 from db.main import get_db
 
@@ -20,11 +20,13 @@ post_router = APIRouter()
 postCategory_service = PostCategoryService()
 post_service = PostService()
 postImage_service = PostImageService()
+postLike_service = PostLikeService()
 
 postOptions = [
         joinedload(post_service.model_class.category), 
         joinedload(post_service.model_class.owner), 
-        selectinload(post_service.model_class.images)
+        selectinload(post_service.model_class.images),
+        selectinload(post_service.model_class.liked_users)
 ]
 
 @post_router.get("/media/{filename}")
@@ -81,19 +83,22 @@ async def create_post(
 
 
 @post_router.get('/')
-async def get_posts(user_id:int, db: Session = Depends(get_db)):
+async def get_posts(user_id:int, db: Session = Depends(get_db), user: dict = Depends(get_current_user)):
 
     
     posts = post_service.get_multi(db=db, options=postOptions, filters={'owner_id': user_id})
 
     posts_json = []
 
-    for model_obj in posts:
+    for post_datas in posts:
 
-        post = model_obj.to_dict(exclude=['owner_id', 'category_id'])
-        post['category'] = model_obj.category.to_dict(exclude=['id'])
-        post['owner'] = model_obj.owner.to_dict(exclude=['id', 'status', 'email', 'is_verified_email'])
-        post['images'] = [image.image for image in model_obj.images]
+        post = post_datas['post'].to_dict(exclude=['owner_id', 'category_id'])
+        post['category'] = post_datas['post'].category.to_dict(exclude=['id'])
+        post['owner'] = post_datas['post'].owner.to_dict(exclude=['id', 'status', 'email', 'is_verified_email'])
+        post['images'] = [image.image for image in post_datas['post'].images]
+        post['comment_count'] = post_datas['comment_count']
+        post['likes_count'] = len(post_datas['post'].liked_users)
+        post['liked'] = user in post_datas['post'].liked_users
         
         posts_json.append(post)
 
@@ -103,9 +108,9 @@ async def get_posts(user_id:int, db: Session = Depends(get_db)):
 
 
 @post_router.get('/{id}')
-async def get_post(id:int, db: Session = Depends(get_db)):
+async def get_post(id:int, db: Session = Depends(get_db), user: dict = Depends(get_current_user)):
 
-    post = post_service.get(db=db, options=postOptions, filters={'id': id})
+    post,comment_count = post_service.get(db=db, options=postOptions, filters={'id': id})
     
     if not post:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
@@ -114,6 +119,9 @@ async def get_post(id:int, db: Session = Depends(get_db)):
     post_json['category'] = post.category.to_dict(exclude=['id'])
     post_json['owner'] = post.owner.to_dict(exclude=['id', 'status', 'email', 'is_verified_email'])
     post_json['images'] = [image.image for image in post.images]
+    post_json['comment_count'] = comment_count
+    post_json['likes_count'] = len(post.liked_users)
+    post_json['liked'] = user in post.liked_users
         
     return post_json
 
@@ -126,9 +134,26 @@ async def delete_post(id: int, db: Session = Depends(get_db), user: dict = Depen
     if res == 0:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     
-
     # celery
     pattern = f'{id}_'
     postImage_service.delete_files(pattern)
     
     return
+
+
+@post_router.post('/{id}/like')
+async def like_post(id: int, db: Session = Depends(get_db), user: dict = Depends(get_current_user)):
+
+    post, _ = post_service.get(db=db, filters={'id': id})
+
+    if not post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    
+    if user in post.liked_users:
+        post_service.delete_like(db=db, id=post.id, user_id=user.id)
+        status_code=status.HTTP_204_NO_CONTENT
+    else:
+        post_service.like(db=db, id=post.id, user_id=user.id)
+        status_code=status.HTTP_201_CREATED
+
+    return Response(status_code=status_code)
