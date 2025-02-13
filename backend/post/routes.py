@@ -1,4 +1,5 @@
 import os
+from typing import Literal
 from shortuid import uid
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, Form, status
@@ -83,10 +84,22 @@ async def create_post(
 
 
 @post_router.get('/')
-async def get_posts(user_id:int, db: Session = Depends(get_db), user: dict = Depends(get_current_user)):
+async def get_posts(
+    user_id: int | None=None, 
+    catg: str | None=None,
+    order: Literal['new'] | Literal['pop']='new', 
+    offset: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db), 
+    user: dict = Depends(get_current_user)):
 
+
+    if user_id:
+        filters={'owner_id': user_id} if user_id else {}
+    else:
+        filters={'category_slug': catg} if catg else {}
     
-    posts = post_service.get_multi(db=db, options=postOptions, filters={'owner_id': user_id})
+    posts = post_service.get_multi(db=db, offset=offset, limit=limit, options=postOptions, filters=filters)
 
     posts_json = []
 
@@ -101,6 +114,9 @@ async def get_posts(user_id:int, db: Session = Depends(get_db), user: dict = Dep
         post['liked'] = user in post_datas['post'].liked_users
         
         posts_json.append(post)
+
+    if order == 'pop':
+        posts_json = sorted(posts_json, key=lambda post: post['likes_count'])
 
     posts_json.reverse()
 

@@ -58,12 +58,22 @@ class PostService(BaseService):
             .subquery()
         )
 
+
         stmt = select(self.model_class, comment_count_subquery.c.comment_count) \
             .join(comment_count_subquery, self.model_class.id == comment_count_subquery.c.id, isouter=True) \
             .options(*options) \
             .order_by(order) \
             .limit(limit) \
-            .offset(offset).filter(*[getattr(self.model_class, k) == v for k,v in filters.items()])
+            .offset(offset)
+
+
+        if 'category_slug' in list(filters.keys()):
+            v = filters.pop('category_slug')    
+            stmt= stmt.join(PostCategory, Post.category_id == PostCategory.id, isouter=True).filter(PostCategory.slug == v)    
+
+
+        if filters:
+            stmt = stmt.filter(*[getattr(self.model_class, k) == v for k,v in filters.items()])
         
 
         rows = db.execute(stmt)
